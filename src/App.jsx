@@ -208,7 +208,7 @@ export default function App (){
    <div className={theme==='dark'?"firsthalf":"firsthalfWhite"}>
    <div className="top">
    <h1>TODO</h1>
-   <img className="themeselector" onClick={()=>{theme==='dark'?setTheme('light'):setTheme('dark')}} src={theme==='dark'?"/images/icon-sun.svg":'public/images/icon-moon.svg'} alt="themeselector" />
+   <img className="themeselector" onClick={()=>{theme==='dark'?setTheme('light'):setTheme('dark')}} src={theme==='dark'?"/images/icon-sun.svg":'/images/icon-moon.svg'} alt="themeselector" />
    </div>
     <div className="text" >
     <input type="checkbox" id='check' checked={false}/>

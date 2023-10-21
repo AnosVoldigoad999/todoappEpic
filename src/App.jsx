@@ -3,6 +3,26 @@ import './App.css'
 export default function App (){
   const [todo, setTodo] = useState('')
   const [category, setCategory] = useState('all')
+  const [deviceWidth, setDeviceWidth] = useState(window.innerWidth)
+  window.addEventListener('resize', ()=>{
+    if(window.innerWidth<=750 && theme==='dark'){
+      document.body.style.backgroundImage = "url('/images/bg-mobile-dark.jpg')"
+    }
+
+    if(deviceWidth<=750 && theme==='light'){
+      document.body.style.backgroundImage = "url('/images/bg-mobile-light.jpg')"
+    }
+
+    if(theme==='dark' && window.innerWidth>750){
+      document.body.style.backgroundImage = "url('/images/bg-desktop-dark.jpg')"
+    }
+
+    if(theme==='light' && window.innerWidth>750){
+      document.body.style.backgroundImage = "url('/images/bg-desktop-light.jpg')"
+    }
+
+
+  })
   const [theme, setTheme] = useState(()=>{
     let gottenTheme = JSON.parse(localStorage.getItem('theme'))
     if(!gottenTheme){
@@ -17,10 +37,22 @@ export default function App (){
     if(theme==='dark'){
       document.body.style.backgroundColor = 'hsl(235, 21%, 11%)'
       document.body.style.backgroundImage = "url('/images/bg-desktop-dark.jpg')"
-    } else{
+    } 
+    if(theme==='light'){
       document.body.style.backgroundColor = 'hsl(0, 0%, 98%)'
       document.body.style.backgroundImage = "url('/images/bg-desktop-light.jpg')"
     }
+
+    if(theme==='dark' && window.innerWidth<=750){
+      document.body.style.backgroundColor = 'hsl(235, 21%, 11%)'
+      document.body.style.backgroundImage = "url('/images/bg-mobile-dark.jpg')"
+    } 
+
+    if(theme==='light'  && window.innerWidth<=750){
+      document.body.style.backgroundColor = 'hsl(0, 0%, 98%)'
+      document.body.style.backgroundImage = "url('/images/bg-mobile-light.jpg')"
+    }
+    
   }, [theme])
   const [todoList, setTodoList] = useState(()=>{
     let gottenTodos = JSON.parse(localStorage.getItem('todos'))
@@ -81,7 +113,7 @@ export default function App (){
      <div className={theme==='dark'?"listarea":"listareaWhite"}>
   <ul draggable>
   {todoList.map((todo, index)=>{
-      return <li draggable={true} key={index} className='todo'><div className="li"><label><input type="checkbox"  onClick={()=>{handleCompleted(index)}} checked={todo.completed} id='check' />{todo.completed?<s>{todo.value}</s>:<>{todo.value}</>}</label></div><img alt="delete" onClick={()=>{handleDelete(index)}} className="delete" src="public\images\icon-cross.svg" /></li>
+      return <li draggable={true} key={index} className='todo'><div className="li"><label><input type="checkbox"  onClick={()=>{handleCompleted(index)}} checked={todo.completed} id='check' /><span>{todo.value}</span></label></div><img alt="delete" onClick={()=>{handleDelete(index)}} className="delete" src="public\images\icon-cross.svg" /></li>
     })}
   </ul>
    <div className={theme==='dark'?"footer":"footerWhite"}>
@@ -111,7 +143,7 @@ export default function App (){
         const [check, setCheck] = useState(todo.completed)
         return <li
         key={index} className='todo'>
-         <div className="li"><label><input  onClick={()=>{handleCompleted(index)}} checked={check} type="checkbox" id='check' />{!check?<>{todo.value}</>:<s>{todo.value}</s>}</label></div>
+         <div className="li"><label><input  onClick={()=>{handleCompleted(index)}} checked={check} type="checkbox" id='check' /><span>{todo.value}</span></label></div>
          <img alt="delete" onClick={()=>{handleDelete(index)}} className="delete" src="public\images\icon-cross.svg" />
          </li>
        }
@@ -179,7 +211,7 @@ export default function App (){
    <img className="themeselector" onClick={()=>{theme==='dark'?setTheme('light'):setTheme('dark')}} src={theme==='dark'?"/images/icon-sun.svg":'public/images/icon-moon.svg'} alt="themeselector" />
    </div>
     <div className="text" >
-    <input type="checkbox" id='check' />
+    <input type="checkbox" id='check' checked={false}/>
     <form onSubmit={handleSubmit}>
     <input type="text" placeholder="Create a new todo..."  value={todo} onChange={e=>{setTodo(e.target.value)}} />
     </form>
@@ -188,6 +220,11 @@ export default function App (){
    {
     category==='all'?<All />:category==='active'?<Active />:category==='completed' ?<Completed />:console.log("what'd you press abeg?!")
    }
+   <div className={theme==='dark'?"catsmobile":"catsmobileWhite"}>
+      <p style={{ color:`${category==='all' ? 'hsl(220, 98%, 61%)':''}`}} onClick={()=>{setCategory('all')}}>All</p>
+      <p style={{ color:`${category==='active' ? 'hsl(220, 98%, 61%)':''}`}} onClick={()=>{setCategory('active')}}>Active</p>
+      <p style={{ color:`${category==='completed' ? 'hsl(220, 98%, 61%)':''}`}} onClick={()=>{setCategory('completed')}}>Completed</p>
+   </div>
   </div>
   </>
 }

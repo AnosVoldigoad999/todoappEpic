@@ -25,8 +25,9 @@ body{
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  width: fit-content;
+  width: 40vw;
   height: 90vh;
+  max-width: 500px;
 }
 
 .delete{
@@ -103,7 +104,7 @@ ul li{
   border-bottom: 1px solid hsl(237, 14%, 26%);
   width: 110%;
   margin: 15px 0px;
-  margin-left: -10%;
+  margin-left: -25px;
   padding-bottom: 10px;
   display: flex;
   align-items: center;
@@ -114,7 +115,7 @@ ul li{
 .listarea{
   color:  hsl(234, 39%, 85%);
   margin-top: 30px;
-  width: 30vw;
+  width: 100%;
   padding-top: 10px;
   height: fit-content;
   display: flex;
@@ -205,7 +206,7 @@ s{
 
 .firsthalfWhite .text{
   background-color: hsl(0, 0%, 98%);
-  box-shadow: 0 0  5px hsl(235, 24%, 19%) ;
+  box-shadow: 0 0  5px  hsl(233, 11%, 84%) ;
 }
 
 .firsthalfWhite .text input[type="text"]{
@@ -221,7 +222,7 @@ s{
 .listareaWhite{
   background-color:  hsl(0, 0%, 98%);
   margin-top: 30px;
-  width: 30vw;
+  width: 100%;
   padding-top: 10px;
   height: fit-content;
   display: flex;
@@ -230,7 +231,7 @@ s{
   justify-content: center;
   align-items: center;
   color: hsl(235, 24%, 19%);
-  box-shadow: 0 0  5px hsl(235, 24%, 19%) ;
+  box-shadow: 0 0  5px  hsl(233, 11%, 84%) ;
 }
 
 
@@ -295,10 +296,10 @@ input[type="checkbox"]:checked{
 
 
 
-/*input[type="checkbox"]:checked ~ span{
+input[type="checkbox"]:checked ~ span{
   color: hsl(234, 11%, 52%);
   text-decoration: line-through;
-}*/
+}
 
 input[type="checkbox"]:after{
   content:'\002713';
@@ -310,13 +311,83 @@ input[type="checkbox"]:checked:after{
   display: block;
 }
 
-/*active*/
 
+/*active*/
+.catsmobile{
+  display: none;
+}
+.catsmobileWhite{
+  display: none;
+}
 
 
 /*mobile*/
+@media(max-width:750px){
+  body{
+    background-position: top;
+    background-size: 100% 40% ;
+  }
+  
+  .container{
+    width: 100vw;
+    max-width: 80vw;
+  }
+
+  .footer{
+    font-size: 0.6rem;
+  }
+  .cats{
+    display: none;
+  }
+
+  .catsWhite{
+    display: none;
+  }
+
+  .catsmobile{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    cursor: pointer;
+    margin-top: 20px;
+    border-radius: 5px;
+    background-color: hsl(235, 24%, 19%);
+  }
+
+  .catsmobileWhite{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    cursor: pointer;
+    margin-top: 20px;
+    border-radius: 5px;
+    color: hsl(235, 24%, 19%);
+    background-color: hsl(0, 0%, 98%);
+    box-shadow: 0 0  5px  hsl(233, 11%, 84%) ;
+  }
+
+  ul li{
+    margin-left: -15px;
+  }
+  
+  .catsmobile p{
+    color:  hsl(236, 9%, 61%);
+    font-size: 0.65rem;
+  }
+
+  .catsmobileWhite p{
+    font-size: 0.65rem;
+  }
 
 
+}
 
+@media (max-width:500px) {
+  ul li{
+    margin-left: -40px;
+  }
+}
 
 /*mobile*/

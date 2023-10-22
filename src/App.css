@@ -21,6 +21,13 @@ body{
   background-color:  hsl(235, 21%, 11%);
 }
 
+.bottomp{
+  font-size: 0.6rem;
+  width: fit-content;
+  color:  hsl(236, 9%, 61%);
+  margin: 0 auto;
+}
+
 .container{
   display: flex;
   flex-direction: column;
@@ -293,6 +300,11 @@ input[type="checkbox"]:checked{
   background-image: linear-gradient(hsl(192, 100%, 67%) , hsl(280, 87%, 65%));
 }
 
+input[type="checkbox"]:hover{
+border-color: hsl(192, 100%, 67%);
+  
+}
+
 
 
 
@@ -323,6 +335,11 @@ input[type="checkbox"]:checked:after{
 
 /*mobile*/
 @media(max-width:750px){
+  .delete{
+    filter: opacity(100);
+  }
+
+
   body{
     background-position: top;
     background-size: 100% 40% ;

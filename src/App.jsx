@@ -149,7 +149,7 @@ export default function App (){
                    {(provided)=>(
                      <li {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}  key={index} className='todo'>
                      <div className="li"><label><input type="checkbox"  onClick={()=>{handleCompleted(index)}} checked={todo.completed} id='check' />
-                     <span>{todo.value}</span></label></div>
+                     <span style={{color:`${todo.completed===true && theme==='light' && 'hsl(233, 11%, 84%)'}`}}>{todo.value}</span></label></div>
                      <img alt="delete" onClick={()=>{handleDelete(index)}} className="delete" src="public\images\icon-cross.svg" />
                      </li>
                    )}
@@ -292,5 +292,6 @@ export default function App (){
       <p style={{ color:`${category==='completed' ? 'hsl(220, 98%, 61%)':''}`}} onClick={()=>{setCategory('completed')}}>Completed</p>
    </div>
   </div>
+ <p className="bottomp">Drag and drop to reorder list.</p>
   </>
 }

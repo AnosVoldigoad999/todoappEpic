@@ -150,7 +150,7 @@ export default function App (){
                      <li {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}  key={index} className='todo'>
                      <div className="li"><label><input type="checkbox"  onClick={()=>{handleCompleted(index)}} checked={todo.completed} id='check' />
                      <span style={{color:`${todo.completed===true && theme==='light' && 'hsl(233, 11%, 84%)'}`}}>{todo.value}</span></label></div>
-                     <img alt="delete" onClick={()=>{handleDelete(index)}} className="delete" src="public\images\icon-cross.svg" />
+                     <img alt="delete" onClick={()=>{handleDelete(index)}} className="delete" src="/images/icon-cross.svg" />
                      </li>
                    )}
                  </Draggable>
@@ -194,7 +194,7 @@ export default function App (){
                   <li {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}
                   key={index} className='todo'>
                    <div className="li"><label><input  onClick={()=>{handleCompleted(index)}} checked={todo.completed} type="checkbox" id='check' /><span>{todo.value}</span></label></div>
-                   <img alt="delete" onClick={()=>{handleDelete(index)}} className="delete" src="public\images\icon-cross.svg" />
+                   <img alt="delete" onClick={()=>{handleDelete(index)}} className="delete" src="/images/icon-cross.svg" />
                    </li>
                 )}
               </Draggable>
@@ -237,7 +237,7 @@ export default function App (){
                 <li {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}
                 key={index} className='todo'>
                  <div className="li"><label><input type="checkbox" onClick={()=>{handleCompleted(index)}} id='check' checked={true} /><s>{todo.value}</s></label></div>
-                 <img alt="delete" onClick={()=>{handleDelete(index)}} className="delete" src="public\images\icon-cross.svg" />
+                 <img alt="delete" onClick={()=>{handleDelete(index)}} className="delete" src="/images/icon-cross.svg" />
                  </li>
               )}
             </Draggable>

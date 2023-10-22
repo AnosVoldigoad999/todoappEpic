@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import './App.css'
 export default function App (){
   const [todo, setTodo] = useState('')
@@ -107,16 +108,56 @@ export default function App (){
     setTodoList(todoList.filter(todo=>todo.completed!=true))
   }
 
+  function handleDragDrop(results){
+    const {source, destination, type} = results //destructuring the results
+
+    if(!destination){
+      return
+    }//if theres no destination, return nothing
+    if(source.draggableId === destination.draggableId && source.index === destination.index){
+      return
+    }//if you drag and drop in the same place, also do nothing
+
+    if(type === 'group'){
+      const sourceIndex = source.index
+      const destinationIndex = destination.index
+      /*const reorderedList = [...todoList]
+      const [removedItem] = reorderedList.splice(sourceIndex, 1)
+      reorderedList.splice(destinationIndex, 0, removedItem)
+      setTodoList(reorderedList)*/
+      const reorderedList = [...todoList]
+      const removedItem = reorderedList[sourceIndex]
+      reorderedList.splice(sourceIndex, 1)
+      reorderedList.splice(destinationIndex, 0, removedItem)
+      setTodoList(reorderedList)
+    }
+
+
+  }
+
   /*components*/
   function All(){
     return<>
-     <div className={theme==='dark'?"listarea":"listareaWhite"}>
-  <ul draggable>
-  {todoList.map((todo, index)=>{
-      return <li draggable={true} key={index} className='todo'><div className="li"><label><input type="checkbox"  onClick={()=>{handleCompleted(index)}} checked={todo.completed} id='check' /><span>{todo.value}</span></label></div><img alt="delete" onClick={()=>{handleDelete(index)}} className="delete" src="public\images\icon-cross.svg" /></li>
-    })}
-  </ul>
-   <div className={theme==='dark'?"footer":"footerWhite"}>
+           <Droppable droppableId="ROOT" type="group">
+       
+
+        {(provided)=>(
+           <div  {...provided.droppableProps} ref={provided.innerRef} className={theme==='dark'?"listarea":"listareaWhite"}>
+             <ul>
+             {todoList.map((todo, index)=>{
+                 return <Draggable draggableId={todo.value} index={index}>
+                   {(provided)=>(
+                     <li {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}  key={index} className='todo'>
+                     <div className="li"><label><input type="checkbox"  onClick={()=>{handleCompleted(index)}} checked={todo.completed} id='check' />
+                     <span>{todo.value}</span></label></div>
+                     <img alt="delete" onClick={()=>{handleDelete(index)}} className="delete" src="public\images\icon-cross.svg" />
+                     </li>
+                   )}
+                 </Draggable>
+               })}
+               {provided.placeholder}
+             </ul>
+             <div className={theme==='dark'?"footer":"footerWhite"}>
     {notComp.length !=0?<p>{notComp.length} {notComp.length>1?"items":"item"} left</p>:<p>No items left!</p>}
     {todoList.length>0 &&
     <>
@@ -129,80 +170,103 @@ export default function App (){
     </>
     }
   </div>
-  </div>
+  
+        </div>
+        )}
+     
+  
+ 
+        </Droppable>
     </>
   }
 
   function Active(){
     return<>
-    <div className={theme==='dark'?"listarea":"listareaWhite"}>
-  { notComp.length !=0?
-    <ul draggable>
-    {todoList.map((todo, index)=>{
-       if(todo.completed===false){
-        const [check, setCheck] = useState(todo.completed)
-        return <li
-        key={index} className='todo'>
-         <div className="li"><label><input  onClick={()=>{handleCompleted(index)}} checked={check} type="checkbox" id='check' /><span>{todo.value}</span></label></div>
-         <img alt="delete" onClick={()=>{handleDelete(index)}} className="delete" src="public\images\icon-cross.svg" />
-         </li>
-       }
-      })}
-    </ul>:<p style={{fontSize:'0.7rem'}}>None Active!</p>
-  }
-   <div className={theme==='dark'?"footer":"footerWhite"}>
-    {notComp.length !=0?<p>{notComp.length} {notComp.length>1?"items":"item"} left</p>:<p>No items left!</p>}
-    {todoList.length>0 &&
-    <>
-    <div className={theme==='dark'?"cats":"catsWhite"}>
-      <p onClick={()=>{setCategory('all')}}>All</p>
-      <p style={{color:'hsl(220, 98%, 61%)'}}>Active</p>
-      <p onClick={()=>{setCategory('completed')}}>Completed</p>
-    </div>
-    {comp.length!=0 &&   <p className="clear" onClick={handleClear}>Clear completed</p>}
-    </>
-    }
-  </div>
-  </div>
+    <Droppable type="group" droppableId="ROOT">    
+      {(provided)=>(
+        <div {...provided.droppableProps} ref={provided.innerRef} className={theme==='dark'?"listarea":"listareaWhite"}>
+        { notComp.length !=0?
+          <ul>
+          {todoList.map((todo, index)=>{
+             if(todo.completed===false){
+              return <Draggable draggableId={todo.value} index={index}>
+                {(provided)=>(
+                  <li {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}
+                  key={index} className='todo'>
+                   <div className="li"><label><input  onClick={()=>{handleCompleted(index)}} checked={todo.completed} type="checkbox" id='check' /><span>{todo.value}</span></label></div>
+                   <img alt="delete" onClick={()=>{handleDelete(index)}} className="delete" src="public\images\icon-cross.svg" />
+                   </li>
+                )}
+              </Draggable>
+             }
+            })}
+            {provided.placeholder}
+          </ul>:<p style={{fontSize:'0.7rem'}}>None Active!</p>
+        }
+       
+         <div className={theme==='dark'?"footer":"footerWhite"}>
+          {notComp.length !=0?<p>{notComp.length} {notComp.length>1?"items":"item"} left</p>:<p>No items left!</p>}
+          {todoList.length>0 &&
+          <>
+          <div className={theme==='dark'?"cats":"catsWhite"}>
+            <p onClick={()=>{setCategory('all')}}>All</p>
+            <p style={{color:'hsl(220, 98%, 61%)'}}>Active</p>
+            <p onClick={()=>{setCategory('completed')}}>Completed</p>
+          </div>
+          {comp.length!=0 &&   <p className="clear" onClick={handleClear}>Clear completed</p>}
+          </>
+          }
+        </div>
+        </div>
+      )}
+  </Droppable>
     </>
   }
 
   function Completed(){
     return<>
-     <div className={theme==='dark'?"listarea":"listareaWhite"}>
-  {
-    comp.length!=0?<ul draggable>
-    {todoList.map((todo, index)=>{
-       if(todo.completed===true){
-        return <li 
-        key={index} className='todo'>
-         <div className="li"><label><input type="checkbox" onClick={()=>{handleCompleted(index)}} id='check' checked={true} /><s>{todo.value}</s></label></div>
-         <img alt="delete" onClick={()=>{handleDelete(index)}} className="delete" src="public\images\icon-cross.svg" />
-         </li>
-       }
-      })}
-    </ul>:<p style={{fontSize:'0.7rem'}}>None Completed!</p>
-  }
-   <div className={theme==='dark'?"footer":"footerWhite"}>
-    {notComp.length !=0?<p>{notComp.length} {notComp.length>1?"items":"item"} left</p>:<p>No items left!</p>}
-    {todoList.length>0 &&
-    <>
-    <div className={theme==='dark'?"cats":"catsWhite"}>
-      <p onClick={()=>{setCategory('all')}}>All</p>
-      <p onClick={()=>{setCategory('active')}}>Active</p>
-      <p style={{color:'hsl(220, 98%, 61%)'}}>Completed</p>
-    </div>
-    {comp.length!=0 &&   <p className="clear" onClick={handleClear}>Clear completed</p>}
-    </>
-    }
-  </div>
-  </div>
+    <Droppable droppableId="ROOT" type="group">
+   {(provided)=>(
+      <div {...provided.droppableProps} ref={provided.innerRef} className={theme==='dark'?"listarea":"listareaWhite"}>
+      {
+        comp.length!=0?<ul draggable>
+        {todoList.map((todo, index)=>{
+           if(todo.completed===true){
+            return <Draggable draggableId={todo.value} index={index}>
+              {(provided)=>(
+                <li {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}
+                key={index} className='todo'>
+                 <div className="li"><label><input type="checkbox" onClick={()=>{handleCompleted(index)}} id='check' checked={true} /><s>{todo.value}</s></label></div>
+                 <img alt="delete" onClick={()=>{handleDelete(index)}} className="delete" src="public\images\icon-cross.svg" />
+                 </li>
+              )}
+            </Draggable>
+           }
+          })}
+          {provided.placeholder}
+        </ul>:<p style={{fontSize:'0.7rem'}}>None Completed!</p>
+      }
+       <div className={theme==='dark'?"footer":"footerWhite"}>
+        {notComp.length !=0?<p>{notComp.length} {notComp.length>1?"items":"item"} left</p>:<p>No items left!</p>}
+        {todoList.length>0 &&
+        <>
+        <div className={theme==='dark'?"cats":"catsWhite"}>
+          <p onClick={()=>{setCategory('all')}}>All</p>
+          <p onClick={()=>{setCategory('active')}}>Active</p>
+          <p style={{color:'hsl(220, 98%, 61%)'}}>Completed</p>
+        </div>
+        {comp.length!=0 &&   <p className="clear" onClick={handleClear}>Clear completed</p>}
+        </>
+        }
+      </div>
+      </div>
+   )}
+  </Droppable>
     </>
   }
 
 
   /*components*/
-
   return <>
   <div className="container">
    <div className={theme==='dark'?"firsthalf":"firsthalfWhite"}>
@@ -217,9 +281,11 @@ export default function App (){
     </form>
     </div>
    </div>
+   <DragDropContext onDragEnd={handleDragDrop}>
    {
     category==='all'?<All />:category==='active'?<Active />:category==='completed' ?<Completed />:console.log("what'd you press abeg?!")
    }
+   </DragDropContext>
    <div className={theme==='dark'?"catsmobile":"catsmobileWhite"}>
       <p style={{ color:`${category==='all' ? 'hsl(220, 98%, 61%)':''}`}} onClick={()=>{setCategory('all')}}>All</p>
       <p style={{ color:`${category==='active' ? 'hsl(220, 98%, 61%)':''}`}} onClick={()=>{setCategory('active')}}>Active</p>

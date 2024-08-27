@@ -5,7 +5,7 @@ export default function App (){
   const [todo, setTodo] = useState('')
   const [category, setCategory] = useState('all')
   const [deviceWidth, setDeviceWidth] = useState(window.innerWidth)
-  window.addEventListener('resize', ()=>{
+  window.addEventListener('resize', ()=>{ 
     if(window.innerWidth<=750 && theme==='dark'){
       document.body.style.backgroundImage = "url('/images/bg-mobile-dark.jpg')"
     }
@@ -80,15 +80,24 @@ export default function App (){
     }
   }, [todoList])
   
-  function handleCompleted(index){
-    for(let i=0; i<todoList.length; i++){
+  function handleCompleted(dex){
+    /*for(let i=0; i<todoList.length; i++){
       if(todoList[i]===todoList[index]){
         todoList[i].completed=!todoList[i].completed
         console.log(todoList[i])
         handleEve()
       }
       
-    }
+    }*///what did i even do here lol
+    let newTodoList = todoList.map((todo, index)=>{ //set as completed or not
+      if(index === dex){
+        return {...todo, completed:!todo.completed}
+      }else{
+        return todo
+        
+      }
+    })
+    setTodoList(newTodoList)
   }
 
   function handleSubmit(e){
@@ -108,7 +117,7 @@ export default function App (){
     setTodoList(todoList.filter(todo=>todo.completed!=true))
   }
 
-  function handleDragDrop(results){
+  function handleDragDrop(results/*"results" contains information about the drag and drop action*/){
     const {source, destination, type} = results //destructuring the results
 
     if(!destination){
@@ -118,18 +127,18 @@ export default function App (){
       return
     }//if you drag and drop in the same place, also do nothing
 
-    if(type === 'group'){
+    if(type === 'group'/* when the type is set to group, it means the drag and drop action is moving an item within a group or list */){
       const sourceIndex = source.index
       const destinationIndex = destination.index
       /*const reorderedList = [...todoList]
       const [removedItem] = reorderedList.splice(sourceIndex, 1)
       reorderedList.splice(destinationIndex, 0, removedItem)
       setTodoList(reorderedList)*/
-      const reorderedList = [...todoList]
-      const removedItem = reorderedList[sourceIndex]
-      reorderedList.splice(sourceIndex, 1)
-      reorderedList.splice(destinationIndex, 0, removedItem)
-      setTodoList(reorderedList)
+      const reorderedList = [...todoList] //creates a copy of the todo list array
+      const removedItem = reorderedList[sourceIndex] //item being dragged and dropped
+      reorderedList.splice(sourceIndex, 1)//removes the item from its original position
+      reorderedList.splice(destinationIndex, 0, removedItem) //inserts the new item at the new position
+      setTodoList(reorderedList)//updates todo list
     }
 
 
@@ -138,16 +147,16 @@ export default function App (){
   /*components*/
   function All(){
     return<>
-           <Droppable droppableId="ROOT" type="group">
+           <Droppable droppableId="ROOT" /*identufies droppable area, ROOT because...ROOT.. */ type="group">
        
 
-        {(provided)=>(
-           <div  {...provided.droppableProps} ref={provided.innerRef} className={theme==='dark'?"listarea":"listareaWhite"}>
+        {(provided)=>(//the "provided" object contains all the necessary stuff to set up
+           <div  {...provided.droppableProps}/*sets up droppable area */ ref={provided.innerRef} /*provides ref to droppable area */  className={theme==='dark'?"listarea":"listareaWhite"}>
              <ul>
              {todoList.map((todo, index)=>{
-                 return <Draggable draggableId={todo.value} index={index}>
+                 return <Draggable draggableId={todo.value}/*identifies draggable item */ index={index}>
                    {(provided)=>(
-                     <li {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}  key={index} className='todo'>
+                     <li {...provided.dragHandleProps}/*improves drag handle behaviour */ {...provided.draggableProps}/*sets up draggable item */ ref={provided.innerRef}/*provides ref to draggable item */  key={index} className='todo'>
                      <div className="li"><label><input type="checkbox"  onClick={()=>{handleCompleted(index)}} checked={todo.completed} id='check' />
                      <span style={{color:`${todo.completed===true && theme==='light' && 'hsl(233, 11%, 84%)'}`}}>{todo.value}</span></label></div>
                      <img alt="delete" onClick={()=>{handleDelete(index)}} className="delete" src="/images/icon-cross.svg" />
